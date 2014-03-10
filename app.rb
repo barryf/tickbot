@@ -13,10 +13,10 @@ def tick_users
 end
 
 # who hasn't done their 7.5 hours for `date`?
-# returns array of usernames
+# returns array of usernames prefixed with @
 def tick_naughty_users(date)
   # find everyone's time tracking entries
-  period = { :start_date => d.to_s, :end_date => date.to_s }
+  period = { :start_date => date.to_s, :end_date => date.to_s }
   entries = tick_api('entries', period)['entries'].entries.group_by{ |d| d['user_id'] }
 
   # find users who haven't completed all their time
@@ -26,7 +26,7 @@ def tick_naughty_users(date)
     total_hours = hours.collect{ |h| h['hours'] }.inject(:+)
     if total_hours < 7.5 
       username = u['email'].split('@').first
-      users.push username
+      users.push "@" + username
     end
   end
   
@@ -61,8 +61,9 @@ get '/remind' do
   end
   
   # has anyone forgotten?
-  if tick_naughty_users(Date.today).any?
-    message = "Don't forget to submit your time to <https://#{ENV['TICK_SUBDOMAIN']}.tickspot.com|Tick>, #{remind_users.sort.join(' ')}."
+  users = tick_naughty_users(Date.today)
+  if users.any?
+    message = "Don't forget to submit your time to <https://#{ENV['TICK_SUBDOMAIN']}.tickspot.com|Tick>, #{users.sort.join(' ')}"
     # hassle them on slack
     slack_message(message)
   else
@@ -77,14 +78,15 @@ get '/shame' do
   # don't remind on sundays and mondays
   return if [0,1].include?(Date.today.wday)
 
-  # don't remind if yesteday was a bank holiday
+  # don't remind if yesterday was a bank holiday
   BankHolidays.all.each do |h|
     return if h.date.to_s == (Date.today-1).to_s
   end
 
   # has anyone forgotten?
-  if tick_naughty_users(Date.today-1).any?
-    message = "The following people should be ashamed of themselves for not completing their time on Tick yesterday: #{remind_users.sort.join(' ')}."
+  users = tick_naughty_users(Date.today-1)
+  if users.any?
+    message = "The following people should be ashamed of themselves for not completing their time on Tick yesterday: #{users.sort.join(' ')}"
   else
     message = "You'll be pleased to hear that yesterday *everyone* completed their time on Tick. Well done, team!"
   end

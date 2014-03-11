@@ -35,7 +35,7 @@ end
 def slack_message(text)
   url = "https://#{ENV['SLACK_SUBDOMAIN']}.slack.com/services/hooks/incoming-webhook?parse=full&token=#{ENV['SLACK_TOKEN']}"
   params = { :text => text, :link_names => 1 }
-  #HTTParty.post url, { :body => { :payload => params.to_json } }
+  HTTParty.post url, { :body => { :payload => params.to_json } }
 end
 
 def remind

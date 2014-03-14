@@ -51,7 +51,7 @@ def remind
   users = tick_naughty_users(Date.today)
   if users.any?
     message = "Don't forget to submit your time to <https://#{ENV['TICK_SUBDOMAIN']}.tickspot.com|Tick>, #{users.sort.join(' ')}"
-  slack_message(message)
+    slack_message(message)
   else
     message = "There is no one left to remind. Well done, team!"
   end

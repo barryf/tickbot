@@ -23,7 +23,7 @@ def tick_naughty_users(date)
   tick_users.each do |u|
     hours = entries[u['id']] || [{'hours' => 0}]
     total_hours = hours.collect{ |h| h['hours'] }.inject(:+)
-    if total_hours < 7.5 
+    if total_hours < 7.45 
       username = u['email'].split('@').first
       users.push "@" + username
     end

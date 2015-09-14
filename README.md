@@ -12,10 +12,10 @@ Key|Description
 ---|-----------
 `TICK_USERNAME`|Tick username/email address
 `TICK_PASSWORD`|Tick password (I'd suggest creating a separate non-admin account)
-`TICK_SUBDOMAIN`|Subdomain you chose when setting up Tick, e.g. globalpersonals
+`TICK_SUBDOMAIN`|Subdomain you chose when setting up Tick, e.g. `globalpersonals`
 `TICK_IGNORE`|Comma-separated list of email addresses for any Tick accounts you want to ignore, e.g. managers or part-time developers
-`SLACK_TOKEN`|Token for your Slack integration
-`SLACK_SUBDOMAIN`|Subdomain for your Slack team, e.g. globaldev
+`SLACK_TOKEN`|Token for your Slack integration, e.g. `xoxp-...`
+`SLACK_SUBDOMAIN`|Subdomain for your Slack team, e.g. `globaldev`
 
 Alternatively, if you're hosting it yourself, create a `.env` file and the [Dotenv](https://github.com/bkeepers/dotenv) gem will pick up your config.
 
@@ -24,9 +24,9 @@ Alternatively, if you're hosting it yourself, create a `.env` file and the [Dote
 Every afternoon at 5:30pm (or whenever your team usually leave):
 
     $ rake remind
-    
+
 Every morning at 7am:
-    
+
     $ rake shame
 
 Alternatively, you can Curl the /remind or /shame URLs using the Sinatra app.

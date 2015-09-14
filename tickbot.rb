@@ -23,19 +23,22 @@ def tick_naughty_users(date)
   tick_users.each do |u|
     hours = entries[u['id']] || [{'hours' => 0}]
     total_hours = hours.collect{ |h| h['hours'] }.inject(:+)
-    if total_hours < 7.45 
+    if total_hours < 7.45
       username = u['email'].split('@').first
       users.push "@" + username
     end
   end
-  
   users
 end
 
-def slack_message(text)
-  url = "https://#{ENV['SLACK_SUBDOMAIN']}.slack.com/services/hooks/incoming-webhook?parse=full&token=#{ENV['SLACK_TOKEN']}"
-  params = { :text => text, :link_names => 1 }
-  HTTParty.post url, { :body => { :payload => params.to_json } }
+def slack_message(channel, text)
+  url = "https://slack.com/api/chat.postMessage"
+  params = { :token => ENV["SLACK_TOKEN"],
+             :text => text,
+             :channel => channel,
+             :username => "tickbot",
+             :icon_url => "http://i.imgur.com/46JvWOZ.png" }
+  HTTParty.post(url, :body => params)
 end
 
 def remind
@@ -46,17 +49,20 @@ def remind
   BankHolidays.all.each do |h|
     return if h.date.to_s == Date.today.to_s
   end
-  
+
   # has anyone forgotten?
   users = tick_naughty_users(Date.today)
-  if users.any?
-    message = "Don't forget to submit your time to <https://#{ENV['TICK_SUBDOMAIN']}.tickspot.com|Tick>, #{users.sort.join(' ')}"
-    slack_message(message)
-  else
-    message = "There is no one left to remind. Well done, team!"
+
+  users.each do |user|
+    msg = "Don't forget to submit your time to <https://#{ENV['TICK_SUBDOMAIN']}.tickspot.com|Tick> for today, #{user}."
+    slack_message(user, msg)
   end
-  
-  message
+
+  if users.any?
+    "These team members still need to complete their Tick: #{users.sort.join(' ')}"
+  else
+    "There is no one left to remind. Well done, team!"
+  end
 end
 
 def shame
@@ -75,7 +81,7 @@ def shame
   else
     message = "You'll be pleased to hear that yesterday *everyone* completed their time on Tick. Well done, team!"
   end
-  slack_message(message)
-  
+  slack_message("#general", message)
+
   message
 end

@@ -35,6 +35,7 @@ def slack_message(channel, text)
   url = "https://slack.com/api/chat.postMessage"
   params = { :token => ENV["SLACK_TOKEN"],
              :text => text,
+             :link_names => 1,
              :channel => channel,
              :username => "tickbot",
              :icon_url => "http://i.imgur.com/46JvWOZ.png" }

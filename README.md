@@ -14,6 +14,7 @@ Key|Description
 `TICK_PASSWORD`|Tick password (I'd suggest creating a separate non-admin account)
 `TICK_SUBDOMAIN`|Subdomain you chose when setting up Tick, e.g. `globalpersonals`
 `TICK_IGNORE`|Comma-separated list of email addresses for any Tick accounts you want to ignore, e.g. managers or part-time developers
+`SLACK_CHANNEL`|Channel to post the message, e.g. `general`
 `SLACK_TOKEN`|Token for your Slack integration, e.g. `xoxp-...`
 `SLACK_SUBDOMAIN`|Subdomain for your Slack team, e.g. `globaldev`
 

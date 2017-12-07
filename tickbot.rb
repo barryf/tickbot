@@ -82,7 +82,7 @@ def shame
   else
     message = "You'll be pleased to hear that yesterday *everyone* completed their time on Tick. Well done, team!"
   end
-  slack_message("#general", message)
+  slack_message("#" + ENV['SLACK_CHANNEL'], message)
 
   message
 end

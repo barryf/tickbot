@@ -6,6 +6,7 @@ gem 'dotenv'
 gem 'sinatra'
 gem 'httparty'
 gem 'bank_holidays'
+gem 'rake'
 
 group :development do
   gem 'foreman'
